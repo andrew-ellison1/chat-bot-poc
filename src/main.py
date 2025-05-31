@@ -4,21 +4,29 @@ from fastapi import FastAPI
 from dotenv import load_dotenv
 import os
 
-# 1. Load env vars (so os.getenv can pick them up)
 load_dotenv()
-
-# 2. Create the FastAPI app
 app = FastAPI()
 
-# 3. Your existing root endpoint
+# -------------------------------------------------------
+# 1. Initialize Pinecone client
+from pinecone import Pinecone
+
+pinecone_api_key = os.getenv("PINECONE_API_KEY")
+pinecone_env     = os.getenv("PINECONE_ENV")
+index_name       = "resume-index"
+
+pc = Pinecone(
+    api_key=pinecone_api_key,
+    environment=pinecone_env
+)
+# Get a handle to the index (assumes it already exists)
+pinecone_index = pc.Index(index_name)
+# -------------------------------------------------------
+
 @app.get("/")
 async def root():
     return {"status": "ok"}
 
-# --- New code below ---
-
-# 4. Import your chat router
+# We’ll include the /chat router farther down...
 from routes.chat import router as chat_router
-
-# 5. Mount it under the default path (/chat)
 app.include_router(chat_router)
