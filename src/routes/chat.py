@@ -1,44 +1,37 @@
-# src/routes/chat.py
-
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-import openai
-import os
-
-# If you’re using RAG, import your helper; otherwise omit this line:
-# from utils.rag import fetch_context
+import openai, os
+from utils.rag import fetch_context   # ← must import your helper
 
 router = APIRouter()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-
 class ChatRequest(BaseModel):
     message: str
-
 
 class ChatResponse(BaseModel):
     reply: str
 
-
 @router.post("/chat", response_model=ChatResponse)
 async def chat_endpoint(req: ChatRequest):
-    # 1. Get the user’s question
     user_q = req.message
 
-    # 2. (Optional) fetch context with RAG
-    # context = await fetch_context(user_q)
-    # prompt = (
-    #     "You are Andrew’s interactive resume assistant.\n\n"
-    #     f"{context}\n\n"
-    #     "If the answer is not here, say “I’m sorry, I don’t have that detail.”"
-    # )
-    # messages = [
-    #     {"role": "system", "content": prompt},
-    #     {"role": "user", "content": user_q},
-    # ]
+    # 1. Fetch the top-3 relevant chunks for this question
+    context_text = await fetch_context(user_q, top_k=3)
 
-    # 2b. If you’re *not* using RAG yet, just send the user message:
+    # DEBUG (temporary): log what you retrieved
+    print("🔍 Retrieved context:\n", context_text)
+
+    # 2. Build your messages array—include the context in the system role
     messages = [
+        {
+            "role": "system",
+            "content": (
+                "You are Andrew’s interactive resume assistant.\n\n"
+                f"{context_text}\n\n"
+                "If the answer is not in these excerpts, say “I’m sorry, I don’t have that detail.”"
+            )
+        },
         {"role": "user", "content": user_q}
     ]
 
@@ -48,13 +41,9 @@ async def chat_endpoint(req: ChatRequest):
             model="gpt-4o-mini",
             messages=messages
         )
-
-        # 4. Extract the assistant’s reply
-        # The v1+ SDK returns a dict-like; we index into it:
+        # 4. Extract the reply
         reply = resp.choices[0].message.content
-
         return {"reply": reply}
 
     except Exception as e:
-        # 5. If anything goes wrong, return HTTP 500 with the error text
         raise HTTPException(status_code=500, detail=str(e))

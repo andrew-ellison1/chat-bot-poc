@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Resume Chatbot</title>
+  <style>
+    body { font-family: sans-serif; margin: 2rem; }
+    #chat { max-width: 600px; margin: auto; }
+    .message { margin: .5rem 0; }
+    .user { text-align: right; }
+    .bot { text-align: left; color: blue; }
+    #input { width: 80%; }
+    #send { width: 18%; }
+  </style>
+</head>
+<body>
+  <div id="chat">
+    <div id="messages"></div>
+    <input id="input" placeholder="Type your message…" />
+    <button id="send">Send</button>
+  </div>
+  <script>
+    const messagesDiv = document.getElementById('messages');
+    const inputEl = document.getElementById('input');
+    const sendBtn = document.getElementById('send');
+
+    function appendMessage(text, cls) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      div.className = `message ${cls}`;
+      messagesDiv.appendChild(div);
+    }
+
+    sendBtn.onclick = async () => {
+      const msg = inputEl.value.trim();
+      if (!msg) return;
+      appendMessage(msg, 'user');
+      inputEl.value = '';
+      const res = await fetch('/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: msg })
+      });
+      const data = await res.json();
+      appendMessage(data.reply, 'bot');
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    };
+  </script>
+</body>
+</html>
