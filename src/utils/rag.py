@@ -13,15 +13,12 @@ pc = Pinecone(
 )
 pinecone_index = pc.Index(os.getenv("INDEX_NAME","resume-index"))
 
-async def query_pinecone(query: str, top_k: int = 3) -> str:
-        """
-    - Embeds `question` using OpenAI embeddings.
-    - Queries `resume-index` for the top_k most similar chunks.
-    - Returns the concatenated chunk texts (joined by line breaks).
-    """
+async def fetch_context(question: str, top_k: int = 3) -> str:
+
         
     # Embed the users questions
 
-    emb_resp = openai.embeddings.create(
-            input=question
+    resp = openai.embeddings.create(
+            input=question,
+            model="text-embedding-3-small"
     )
