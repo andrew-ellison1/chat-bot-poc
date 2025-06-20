@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Andrew Ellison • Data & Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family:'Inter',sans-serif; color:#111; background:#f0f3f5; line-height:1.6; }
+    header.site-header { position: fixed; top: 0; width: 100%; background: #ffffffcc; backdrop-filter: blur(8px); padding: 1rem 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 100; }
+    .nav { display: flex; align-items: center; justify-content: space-between; max-width: 960px; margin: 0 auto; }
+    .logo { font-weight:700; font-size:1.25rem; color:#041E42; text-decoration:none; }
+    .nav-links a { margin-left:2rem; font-size:0.875rem; color:#041E42; text-decoration:none; text-transform:lowercase; transition: color .2s; cursor: pointer; }
+    .nav-links a:hover { color:#365f8b; }
+    .nav-links .social-icon { width:30px; height:25px; margin-left:1rem; vertical-align:middle; }
+    main { padding-top:80px; }
+    section { max-width:720px; margin: 1rem auto; padding: 0 2rem; opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    section.visible { opacity:1; transform: translateY(0); }
+    .hero { text-align:center; padding:4rem 2rem; }
+    .hero .headshot { width:250px; height:250px; border-radius:50%; object-fit:cover; margin-bottom:1.5rem; box-shadow:0 6px 16px rgba(0,0,0,0.15); border:4px solid #041E42; }
+    .hero h1 { font-size:3rem; font-weight:700; color:#041E42; }
+    .hero p { font-size:1.25rem; color:#555; }
+    section h2 { font-size:1.5rem; font-weight:600; margin-bottom:1rem; border-bottom:3px solid #041E42; display:inline-block; padding-bottom:0.25rem; text-transform:lowercase; color:#333; }
+    .about p { font-size:1rem; color:#333; margin-top:1rem; margin-bottom:3rem ;}
+    .chat-container { background:#ffffffcc; margin-top:1rem;  border-radius:0.75rem; box-shadow:0 6px 16px rgba(0,0,0,0.05); }
+    /* Chat UI Styles */
+    #chat-ui { display: flex; flex-direction: column; height:600px; }
+    #messages { flex:1; overflow-y:auto; padding:0.5rem; border:1px solid #ddd; border-radius:0.5rem; background:#ffffffcc }
+    .message { margin:0.5rem 0; padding:0.5rem; border-radius:0.5rem; max-width:80%; word-wrap:break-word; }
+    .user { align-self:flex-end; background:#e0f2f1; color:#004d40; }
+    .bot { align-self:flex-start; background:#fff9e6; color:#664e27; }
+    .input-area { display:flex; margin-top:1rem; }
+    #input-msg { flex:1; padding:0.75rem; border:1px solid #ccc; border-radius:0.5rem 0 0 0.5rem; outline:none; }
+    #send-btn { padding:0 1rem; background:#041E42; color:#fff; border:none; border-radius:0 0.5rem 0.5rem 0; cursor:pointer; transition:background .2s; }
+    #send-btn:hover { background:#05296c; }
+    .resume-section embed { width:100%; height:600px; border:none; border-radius:0.5rem; box-shadow:0 6px 16px rgba(0,0,0,0.05); }
+    footer { text-align:center; padding:2rem 1rem; color:#777; font-size:0.875rem; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav">
+      <a href="#home" class="logo">Andrew Ellison</a>
+      <div class="nav-links">
+        <a data-target="about">about</a>
+        <a data-target="chat">chat</a>
+        <a data-target="resume">resume</a>
+        <a href="https://www.linkedin.com/in/andrew-ellison-44545815/" target="_blank" rel="noopener">
+          <img src="/static/LI-In-Bug.png" alt="LinkedIn" class="social-icon" />
+        </a>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <section id="home" class="hero">
+      <img src="/static/headshot.jpg" alt="Andrew Ellison" class="headshot" />
+      <h1>Andrew Ellison</h1>
+      <p>Data and Analytics leader who loves to build cool things that help organizations do more with their data.</p>
+    </section>
+    <section id="about" class="about">
+      <h2>about me</h2>
+      <p>Hello! I’m Andrew Ellison, a seasoned data and analytics leader with over 15 years of experience building data-driven cultures and scalable analytics platforms. I’m passionate about turning complex data into actionable insights, mentoring high-performing teams, and driving measurable business impact. Outside of work, I enjoy exploring the latest in AI/ML innovations and refining my grilling techniques.</p>
+    </section>
+    <section id="chat" class="chat-section">
+      <h2>learn about Andrew</h2>
+      <p>Learn more about my experience through my interactive AI-powered resume (built by yours truly).</p>
+      <div class="chat-container">
+        <div id="chat-ui">
+          <div id="messages"></div>
+          <div class="input-area">
+            <input id="input-msg" placeholder="Type your message here..." />
+            <button id="send-btn">Send</button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="resume" class="resume-section">
+      <h2>resume</h2>
+       <p>If you'd prefer, <a href="/static/resume.pdf" target="_blank" rel="noopener" style="color:#041E42; text-decoration:underline;">click here to view or download a copy of my resume</a>.</p>
+    </section>
+  </main>
+  <footer>© 2025 Andrew Ellison</footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Section animations
+      const sections = document.querySelectorAll('section');
+      const observerOptions = { threshold: 0.1 };
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+      sections.forEach(sec => observer.observe(sec));
+
+      // Navigation links
+      const links = document.querySelectorAll('.nav-links a[data-target]');
+      links.forEach(link => {
+        link.addEventListener('click', () => {
+          const target = document.getElementById(link.getAttribute('data-target'));
+          target.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      // Chat functionality
+      const messagesDiv = document.getElementById('messages');
+      const inputEl = document.getElementById('input-msg');
+      const sendBtn = document.getElementById('send-btn');
+
+            // Allow Enter key to send messages
+      inputEl.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendBtn.click();
+        }
+      });
+
+      function appendMessage(text, cls) {
+        const div = document.createElement('div');
+        div.className = `message ${cls}`;
+        div.textContent = text;
+        messagesDiv.appendChild(div);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }
+
+      sendBtn.addEventListener('click', async () => {
+        const msg = inputEl.value.trim(); if (!msg) return;
+        appendMessage(msg, 'user'); inputEl.value = '';
+        try {
+          const res = await fetch('/chat', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: msg })
+          });
+          const data = await res.json();
+          appendMessage(data.reply, 'bot');
+        } catch (err) {
+          appendMessage('Error: ' + err.message, 'bot');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 import openai, os
-from utils.rag import fetch_context   # ← must import your helper
+from src.utils.rag import fetch_context   # ← must import your helper
 
 router = APIRouter()
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -28,8 +28,9 @@ async def chat_endpoint(req: ChatRequest):
             "role": "system",
             "content": (
                 "You are Andrew’s interactive resume assistant.\n\n"
+                "Use these resume snippets and respond in a concise, professional manner.\n\n"
                 f"{context_text}\n\n"
-                "If the answer is not in these excerpts, say “I’m sorry, I don’t have that detail.”"
+                "If the answer is not in these excerpts, say “I'm sorry, my responses are limited. You must ask the right equestion”"
             )
         },
         {"role": "user", "content": user_q}
