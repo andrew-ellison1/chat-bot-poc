@@ -28,7 +28,7 @@ async def chat_endpoint(req: ChatRequest):
             "role": "system",
             "content": (
                 "You are Andrew’s interactive resume assistant.\n\n"
-                "Use these resume snippets and respond in a concise, professional manner.\n\n"
+                "You will answer questions about Andrew’s resume in a consie professional manner using the following excerpts:\n\n"
                 f"{context_text}\n\n"
                 "If the answer is not in these excerpts, say “I'm sorry, my responses are limited. You must ask the right equestion”"
             )
@@ -39,7 +39,7 @@ async def chat_endpoint(req: ChatRequest):
     try:
         # 3. Call the new v1+ Chat API
         resp = openai.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-4o",
             messages=messages
         )
         # 4. Extract the reply

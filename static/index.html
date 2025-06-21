@@ -26,18 +26,27 @@
     .hero p { font-size:1.25rem; color:#555; }
     section h2 { font-size:1.5rem; font-weight:600; margin-bottom:1rem; border-bottom:3px solid #041E42; display:inline-block; padding-bottom:0.25rem; text-transform:lowercase; color:#333; }
     .about p { font-size:1rem; color:#333; margin-top:1rem; margin-bottom:3rem ;}
-    .chat-container { background:#ffffffcc; margin-top:1rem;  border-radius:0.75rem; box-shadow:0 6px 16px rgba(0,0,0,0.05); }
+    .chat-container { background:#ffffffcc;  border-radius:0.75rem; box-shadow:0 6px 16px rgba(0,0,0,0.05); }
     /* Chat UI Styles */
     #chat-ui { display: flex; flex-direction: column; height:600px; }
     #messages { flex:1; overflow-y:auto; padding:0.5rem; border:1px solid #ddd; border-radius:0.5rem; background:#ffffffcc }
     .message { margin:0.5rem 0; padding:0.5rem; border-radius:0.5rem; max-width:80%; word-wrap:break-word; }
-    .user { align-self:flex-end; background:#e0f2f1; color:#004d40; }
-    .bot { align-self:flex-start; background:#fff9e6; color:#664e27; }
+    .user { align-self:flex-end; background:#d8d8d8; color:#fdfdfd; }
+    .bot { align-self:flex-start; background:#aeb9cc; color:#fdfdfd; }
     .input-area { display:flex; margin-top:1rem; }
     #input-msg { flex:1; padding:0.75rem; border:1px solid #ccc; border-radius:0.5rem 0 0 0.5rem; outline:none; }
     #send-btn { padding:0 1rem; background:#041E42; color:#fff; border:none; border-radius:0 0.5rem 0.5rem 0; cursor:pointer; transition:background .2s; }
     #send-btn:hover { background:#05296c; }
-    .resume-section embed { width:100%; height:600px; border:none; border-radius:0.5rem; box-shadow:0 6px 16px rgba(0,0,0,0.05); }
+    .contact-section embed { width:100%; height:600px; border:none; margin-top: 1rem; border-radius:0.5rem; box-shadow:0 6px 16px rgba(0,0,0,0.05); }
+        .note-box {
+      background:#fdecea;
+      border-left:4px solid #f44336;
+      color:#611a15;
+      padding:1rem;
+      margin-bottom:1rem;
+      margin-top:1rem;
+      border-radius:4px;
+    }
     footer { text-align:center; padding:2rem 1rem; color:#777; font-size:0.875rem; }
   </style>
 </head>
@@ -48,7 +57,7 @@
       <div class="nav-links">
         <a data-target="about">about</a>
         <a data-target="chat">chat</a>
-        <a data-target="resume">resume</a>
+        <a data-target="contact">contact</a>
         <a href="https://www.linkedin.com/in/andrew-ellison-44545815/" target="_blank" rel="noopener">
           <img src="/static/LI-In-Bug.png" alt="LinkedIn" class="social-icon" />
         </a>
@@ -67,7 +76,10 @@
     </section>
     <section id="chat" class="chat-section">
       <h2>learn about Andrew</h2>
-      <p>Learn more about my experience through my interactive AI-powered resume (built by yours truly).</p>
+      <p>Learn more about my experience through the interactive AI-powered resume I built.</p>
+            <div class="note-box">
+        <strong>NOTE:</strong> This is a work in progress. This chatbot is powered by OpenAI's GPT-4o and mistakes may occur.
+      </div>
       <div class="chat-container">
         <div id="chat-ui">
           <div id="messages"></div>
@@ -78,9 +90,9 @@
         </div>
       </div>
     </section>
-    <section id="resume" class="resume-section">
-      <h2>resume</h2>
-       <p>If you'd prefer, <a href="/static/resume.pdf" target="_blank" rel="noopener" style="color:#041E42; text-decoration:underline;">click here to view or download a copy of my resume</a>.</p>
+    <section id="contact" class="contact-section">
+      <h2>contact</h2>
+       <p>Want to connect? <a href="mailto:aellison8621@gmail.com" style="color:#041E42; text-decoration:underline;">Send me an email to set up some time to connect</a>.</p>
     </section>
   </main>
   <footer>© 2025 Andrew Ellison</footer>
