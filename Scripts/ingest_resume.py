@@ -1,6 +1,6 @@
 # scripts/ingest_resume.py
 
-from langchain.document_loaders import PyPDFLoader
+from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import openai, os
 from pinecone import Pinecone
@@ -15,6 +15,7 @@ index = pc.Index(os.getenv("INDEX_NAME", "resume-index"))
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # 3) Load & split
+
 loader = PyPDFLoader("static/resume.pdf")
 docs = loader.load()
 splitter = RecursiveCharacterTextSplitter(chunk_size=600, chunk_overlap=100,
