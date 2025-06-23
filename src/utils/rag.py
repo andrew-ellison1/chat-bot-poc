@@ -17,48 +17,47 @@ pc = Pinecone(
 pinecone_index = pc.Index("resume-index")
 
 
-async def fetch_context(question: str, top_k: int = 3) -> str:
-    """
-    1) Embed the incoming question.
-    2) Query Pinecone for the top_k matches.
-    3) Return the joined text snippets, or an explicit fallback if none found.
-    """
+async def fetch_context(question: str, top_k: int = 5) -> str:
     # — Embed the question —
     emb_resp = openai.embeddings.create(
         input=question,
         model="text-embedding-3-small"
     )
-    # If emb_resp is a dict (v0.28+) or object, pull it out accordingly:
     try:
         q_emb = emb_resp["data"][0]["embedding"]
     except Exception:
         q_emb = emb_resp.data[0].embedding
 
-    # — Query Pinecone —
+    # — Query Pinecone for more than we’ll actually need —
     query_resp = pinecone_index.query(
         vector=q_emb,
-        top_k=top_k,
+        top_k=10,                  # fetch a few extra
         include_metadata=True
     )
 
-    # — Extract the snippets —
-    snippets = []
-    # Try both dict- and object-style APIs:
+    # — Pull out the raw matches list (object or dict style) —
     matches = getattr(query_resp, "matches", query_resp.get("matches", []))
-    for m in matches:
-        # object-like
-        if hasattr(m, "metadata") and isinstance(m.metadata, dict):
-            snippets.append(m.metadata.get("text", ""))
-        # dict-like
-        elif isinstance(m, dict) and "metadata" in m:
-            snippets.append(m["metadata"].get("text", ""))
 
-    # — Debug: print what we found —
-    print(f"🔍 fetch_context received {len(snippets)} snippets for question: “{question}”")
-    for i, s in enumerate(snippets, 1):
-        print(f"  {i}. {s[:80]}{'…' if len(s)>80 else ''}")
+    # — Sort by your start_date metadata (newest first) —
+    #   defaulting any missing date to “1970-01-01”
+    def _get_date(m):
+        md = m.metadata if hasattr(m, "metadata") else m.get("metadata", {})
+        return md.get("start_date", "1970-01-01")
 
-    # — Return joined text or a clear fallback —
+    sorted_matches = sorted(matches, key=_get_date, reverse=True)
+
+    # — Now take only the top_k most recent ones —
+    selected = sorted_matches[:top_k]
+
+    # — Extract the “text” from each match into snippets —
+    snippets = []
+    for m in selected:
+        md = m.metadata if hasattr(m, "metadata") else m.get("metadata", {})
+        snippets.append(md.get("text", ""))
+
+    # — Debug —
+    print(f"🔍 fetch_context returning {len(snippets)} snippets (sorted by date)”")
+
     if snippets:
         return "\n\n".join(snippets)
     else:
